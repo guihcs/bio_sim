@@ -1,0 +1,130 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> tree
+Rule 1     tree -> LOG LPAREN tree RPAREN tree
+Rule 2     tree -> URI tree
+Rule 3     tree -> empty
+Rule 4     empty -> <empty>
+
+Terminals, with rules where they appear
+
+LOG                  : 1
+LPAREN               : 1
+RPAREN               : 1
+URI                  : 2
+error                : 
+
+Nonterminals, with rules where they appear
+
+empty                : 3
+tree                 : 1 1 2 0
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . tree
+    (1) tree -> . LOG LPAREN tree RPAREN tree
+    (2) tree -> . URI tree
+    (3) tree -> . empty
+    (4) empty -> .
+
+    LOG             shift and go to state 2
+    URI             shift and go to state 3
+    $end            reduce using rule 4 (empty -> .)
+
+    tree                           shift and go to state 1
+    empty                          shift and go to state 4
+
+state 1
+
+    (0) S' -> tree .
+
+
+
+state 2
+
+    (1) tree -> LOG . LPAREN tree RPAREN tree
+
+    LPAREN          shift and go to state 5
+
+
+state 3
+
+    (2) tree -> URI . tree
+    (1) tree -> . LOG LPAREN tree RPAREN tree
+    (2) tree -> . URI tree
+    (3) tree -> . empty
+    (4) empty -> .
+
+    LOG             shift and go to state 2
+    URI             shift and go to state 3
+    $end            reduce using rule 4 (empty -> .)
+    RPAREN          reduce using rule 4 (empty -> .)
+
+    tree                           shift and go to state 6
+    empty                          shift and go to state 4
+
+state 4
+
+    (3) tree -> empty .
+
+    $end            reduce using rule 3 (tree -> empty .)
+    RPAREN          reduce using rule 3 (tree -> empty .)
+
+
+state 5
+
+    (1) tree -> LOG LPAREN . tree RPAREN tree
+    (1) tree -> . LOG LPAREN tree RPAREN tree
+    (2) tree -> . URI tree
+    (3) tree -> . empty
+    (4) empty -> .
+
+    LOG             shift and go to state 2
+    URI             shift and go to state 3
+    RPAREN          reduce using rule 4 (empty -> .)
+
+    tree                           shift and go to state 7
+    empty                          shift and go to state 4
+
+state 6
+
+    (2) tree -> URI tree .
+
+    $end            reduce using rule 2 (tree -> URI tree .)
+    RPAREN          reduce using rule 2 (tree -> URI tree .)
+
+
+state 7
+
+    (1) tree -> LOG LPAREN tree . RPAREN tree
+
+    RPAREN          shift and go to state 8
+
+
+state 8
+
+    (1) tree -> LOG LPAREN tree RPAREN . tree
+    (1) tree -> . LOG LPAREN tree RPAREN tree
+    (2) tree -> . URI tree
+    (3) tree -> . empty
+    (4) empty -> .
+
+    LOG             shift and go to state 2
+    URI             shift and go to state 3
+    $end            reduce using rule 4 (empty -> .)
+    RPAREN          reduce using rule 4 (empty -> .)
+
+    tree                           shift and go to state 9
+    empty                          shift and go to state 4
+
+state 9
+
+    (1) tree -> LOG LPAREN tree RPAREN tree .
+
+    $end            reduce using rule 1 (tree -> LOG LPAREN tree RPAREN tree .)
+    RPAREN          reduce using rule 1 (tree -> LOG LPAREN tree RPAREN tree .)
+
