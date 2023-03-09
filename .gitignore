@@ -1,4 +1,5 @@
 .idea/
 __pycache__/
-complex_bio.pt
 .ipynb_checkpoints
+.env
+output
