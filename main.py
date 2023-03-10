@@ -162,5 +162,5 @@ if __name__ == '__main__':
 
     elif args.return_mode == 'vectors':
         logdefs_raw.to_csv(os.path.join(args.output, 'logdefs.csv'), index=False)
-        np.save(os.path.join(args.output, 'entities.npy'), torch.cat(fembx).numpy())
-        np.save(os.path.join(args.output, 'logdefs.npy'), torch.cat(femby).numpy())
+        np.save(os.path.join(args.output, 'entities.npy'), torch.cat(fembx).numpy(), allow_pickle=False)
+        np.save(os.path.join(args.output, 'logdefs.npy'), torch.cat(femby).numpy(), allow_pickle=False)
