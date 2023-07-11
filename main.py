@@ -154,7 +154,7 @@ if __name__ == '__main__':
             sims.append(fs.cpu())
 
     if not os.path.exists(args.output):
-        os.mkdir(args.output)
+        os.mkdirs(args.output, exist_ok=True)
 
     if args.return_mode == 'similarity':
         logdefs_raw['similarity'] = torch.cat(sims).tolist()

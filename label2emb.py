@@ -1,4 +1,3 @@
-
 import os
 
 import argparse
@@ -35,10 +34,10 @@ def parse_arguments():
     return arg_parser.parse_args()
 
 
-
 if __name__ == '__main__':
     args = parse_arguments()
     device = torch.device(args.device)
+
     tokenizer = AutoTokenizer.from_pretrained(args.model)
     model = AutoModel.from_pretrained(args.model)
     model.to(device)
@@ -51,20 +50,17 @@ if __name__ == '__main__':
     xinput_ids = ex['input_ids']
     xattention_mask = ex['attention_mask']
 
-    result_embeddings = []
-
-    with torch.no_grad():
-
-        for i, a in tqdm(DataLoader(TensorDataset(xinput_ids, xattention_mask), batch_size=args.batch_size)):
-            embedding = gen_embs(model, i, a,device).cpu()
-            result_embeddings.append(embedding)
-
-    lines = []
-    for e in torch.cat(result_embeddings).tolist():
-        lines.append(' '.join([str(x) for x in e]))
-
     if not os.path.exists(args.output):
         os.makedirs(args.output, exist_ok=True)
 
     with open(os.path.join(args.output, 'embeddings.txt'), 'w') as f:
-        f.write('\n'.join(lines))
+
+        with torch.no_grad():
+
+            for q, i, a in DataLoader(TensorDataset(torch.arange(0, len(lines)), xinput_ids, xattention_mask), batch_size=args.batch_size):
+                embedding = gen_embs(model, i, a, device).cpu()
+                elines = []
+                for qw, e in zip(q, embedding.tolist()):
+                    elines.append(lines[qw.item()] + ',' + ' '.join([str(x) for x in e]))
+
+                f.write('\n'.join(elines))
