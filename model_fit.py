@@ -64,7 +64,7 @@ if __name__ == '__main__':
     device = torch.device(args.device)
     model = model.to(device)
     optimizer = optim.Adam(model.parameters(), lr=args.lr)
-    triplet_loss = nn.TripletMarginWithDistanceLoss(distance_function = lambda x, y: 1.0 - torch.cosine_similarity(x, y), margin=0.5)
+    crit = nn.TripletMarginWithDistanceLoss(distance_function = lambda x, y: 1.0 - torch.cosine_similarity(x, y), margin=0.5)
     lh = []
     for e in range(args.epochs):
         el = []
