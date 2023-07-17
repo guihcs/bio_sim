@@ -46,6 +46,7 @@ if __name__ == '__main__':
     with open(args.labels) as f:
         lines = [line.strip() for line in f]
 
+
     ex = tokenizer(lines, return_tensors='pt', padding=True)
     xinput_ids = ex['input_ids']
     xattention_mask = ex['attention_mask']
@@ -62,5 +63,4 @@ if __name__ == '__main__':
                 elines = []
                 for qw, e in zip(q, embedding.tolist()):
                     elines.append(lines[qw.item()] + ',' + ' '.join([str(x) for x in e]))
-
-                f.write('\n'.join(elines))
+                f.write('\n'.join(elines) + '\n')
