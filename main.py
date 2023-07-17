@@ -57,6 +57,8 @@ def parse_arguments():
     arg_parser.add_argument('--device', dest='device', nargs='?', default='cpu',
                             help='The device to use for the embeddings generation.')
 
+    arg_parser.add_argument('--state', dest='state', nargs='?', help='State of already trained model.')
+
     return arg_parser.parse_args()
 
 
@@ -71,6 +73,10 @@ if __name__ == '__main__':
 
     tokenizer = AutoTokenizer.from_pretrained(args.model)
     model = AutoModel.from_pretrained(args.model)
+
+    if args.state:
+        model.load_state_dict(torch.load(args.state))
+
     model.to(device)
     model.eval()
 
