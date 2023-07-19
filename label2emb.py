@@ -64,7 +64,7 @@ if __name__ == '__main__':
 
         with torch.no_grad():
 
-            for q, i, a in DataLoader(TensorDataset(torch.arange(0, len(lines)), xinput_ids, xattention_mask), batch_size=args.batch_size):
+            for q, i, a in tqdm(DataLoader(TensorDataset(torch.arange(0, len(lines)), xinput_ids, xattention_mask), batch_size=args.batch_size)):
                 embedding = gen_embs(model, i, a, device).cpu()
                 elines = []
                 for qw, e in zip(q, embedding.tolist()):
