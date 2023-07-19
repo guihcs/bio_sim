@@ -44,7 +44,7 @@ if __name__ == '__main__':
     model = AutoModel.from_pretrained(args.model)
 
     if args.state:
-        model.load_state_dict(torch.load(args.state))
+        model.load_state_dict(torch.load(args.state, map_location=device))
 
     model.to(device)
     model.eval()
