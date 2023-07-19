@@ -60,6 +60,9 @@ if __name__ == '__main__':
     if not os.path.exists(args.output):
         os.makedirs(args.output, exist_ok=True)
 
+    if not os.path.exists(args.output):
+        os.makedirs(args.output, exist_ok=True)
+
     with open(os.path.join(args.output, 'embeddings.txt'), 'w') as f:
 
         with torch.no_grad():
