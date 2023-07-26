@@ -49,27 +49,34 @@ if __name__ == '__main__':
     model.to(device)
     model.eval()
 
-    with open(args.labels) as f:
-        lines = [line.strip() for line in f]
-
-
-    ex = tokenizer(lines, return_tensors='pt', padding=True)
-    xinput_ids = ex['input_ids']
-    xattention_mask = ex['attention_mask']
-
     if not os.path.exists(args.output):
         os.makedirs(args.output, exist_ok=True)
 
     if not os.path.exists(args.output):
         os.makedirs(args.output, exist_ok=True)
 
-    with open(os.path.join(args.output, 'embeddings.txt'), 'w') as f:
+    with open(args.labels, 'rb') as f:
+        num_lines = sum(1 for _ in f)
 
-        with torch.no_grad():
+    with open(args.labels) as fr:
+        with open(os.path.join(args.output, 'embeddings.txt'), 'w') as f:
 
-            for q, i, a in tqdm(DataLoader(TensorDataset(torch.arange(0, len(lines)), xinput_ids, xattention_mask), batch_size=args.batch_size)):
-                embedding = gen_embs(model, i, a, device).cpu()
-                elines = []
-                for qw, e in zip(q, embedding.tolist()):
-                    elines.append(lines[qw.item()] + ',' + ' '.join([str(x) for x in e]))
-                f.write('\n'.join(elines) + '\n')
+            batch = []
+            for line in tqdm(fr, total=num_lines):
+                batch.append(line.strip())
+                if len(batch) == args.batch_size:
+
+                    ex = tokenizer(batch, return_tensors='pt', padding=True)
+                    xinput_ids = ex['input_ids']
+                    xattention_mask = ex['attention_mask']
+
+                    with torch.no_grad():
+
+                        for q, i, a in DataLoader(TensorDataset(torch.arange(0, len(batch)), xinput_ids, xattention_mask), batch_size=args.batch_size):
+                            embedding = gen_embs(model, i, a, device).cpu()
+                            elines = []
+                            for qw, e in zip(q, embedding.tolist()):
+                                elines.append(batch[qw.item()] + ',' + ' '.join([str(x) for x in e]))
+                        f.write('\n'.join(elines) + '\n')
+                    batch = []
+                    f.flush()
